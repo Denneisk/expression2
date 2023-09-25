@@ -1,0 +1,51 @@
+@name foreach_vs_for
+@persist [T T1 T2]:table I
+@strict
+if(first())
+{
+    T = table()
+    T1 = table()
+    T2 = table()
+
+    for(I=1, 2500)
+    {
+        T[I, string] = I:toString()
+    }
+    I = 1
+    interval(1000)
+}
+elseif(I==1)
+{
+    for(I=2501, 5000)
+    {
+        T[I, string] = I:toString()
+    }
+    interval(3000)
+    I = 2
+}
+elseif(I==2)
+{
+    J = 0
+    S = systime()
+    foreach(K:number, V:string = T)
+    {
+        T1[K, string] = V
+        J++
+    }
+    S = systime() - S
+    print("foreach " + S + " " + J + " ops: " + opcounter())
+    I = 3
+    interval(3000)
+}
+else
+{
+    J = 0
+    SS = systime()
+    for(I = 1, T:count())
+    {
+        T2[I, string] = T[I, string]
+        J++
+    }
+    SS = systime() - SS
+    print("for " + SS + " " + J + " ops: " + opcounter())
+}

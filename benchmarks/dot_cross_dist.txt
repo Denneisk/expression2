@@ -1,0 +1,107 @@
+@name dot_cross_dist
+@persist [T]:table I Vars:gtable
+@strict
+if(first())
+{
+    T = table()
+    Vars = gTable("Vars")
+
+    S = systime()
+    for(I = 1, 10000)
+    {
+        T[I, vector] = randvec(1, 100)
+    }
+    S = systime() - S
+    
+    if(!Vars["randvec", number]) {Vars["randvec", number] = S}
+    
+    Vars["randvec", number] = (Vars["randvec", number] + S) / 2
+    
+    #print(format("first randvec \t\t\t\t\t[[%f] ops: [%f]]", S, opcounter()))
+    I = 1
+    interval(1000)
+}
+elseif(I == 1)
+{
+    J = vec(1)
+    N = 0
+    
+    S = systime()
+    foreach(_:number, V:vector = T)
+    {
+        N += J:dot(V)
+    }
+    S = systime() - S
+    
+    if(!Vars["dot", number]) {Vars["dot", number] = S}
+    
+    Vars["dot", number] = (Vars["dot", number] + S) / 2
+    
+    #print(format("dot \tN = %-24f \t\t[[%f] ops: [%f]]", N, S, opcounter()))
+    I = 2
+    interval(3000)
+}
+elseif(I == 2)
+{
+    J = vec(1)
+    
+    S = systime()
+    foreach(_:number, V:vector = T)
+    {
+        J = J:cross(V)
+    }
+    S = systime() - S
+    
+    if(!Vars["cross", number]) {Vars["cross", number] = S}
+    
+    Vars["cross", number] = (Vars["cross", number] + S) / 2
+    
+    #print(format("cross J = [%-24s] \t[[%f] ops: [%f]]", J, S, opcounter()))
+    I = 3
+    interval(3000)
+}
+elseif(I == 3)
+{
+    J = vec(1)
+    N = 0
+    
+    S = systime()
+    foreach(_:number, V:vector = T)
+    {
+        N += J:distance(V)
+    }
+    S = systime() - S
+    
+    if(!Vars["dist", number]) {Vars["dist", number] = S}
+    
+    Vars["dist", number] = (Vars["dist", number] + S) / 2
+    
+    #print(format("dist \tN = %-24f \t\t[[%f] ops: [%f]]", N, S, opcounter()))
+    I = 4
+    interval(3000)
+}
+elseif(I == 4)
+{
+    N = 0
+    
+    S = systime()
+    foreach(_:number, V:vector = T)
+    {
+        N += V:length()
+    }
+    S = systime() - S
+    
+    if(!Vars["length", number]) {Vars["length", number] = S}
+    
+    Vars["length", number] = (Vars["length", number] + S) / 2
+    
+    #print(format("length \tN = %-24f \t\t[[%f] ops: [%f]]", N, S, opcounter()))
+    I = 5
+    interval(3000)
+}
+else
+{
+    print(format("randvec\t=\t%f\ndot\t=\t%f\ncross\t=\t%f\ndist\t=\t%f\nlength\t=\t%f",
+        Vars["randvec", number], Vars["dot", number], Vars["cross", number], Vars["dist", number],
+        Vars["length", number]))
+}
