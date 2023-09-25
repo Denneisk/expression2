@@ -1,0 +1,9 @@
+#Tells you what key you pressed. For figuring out valid keyPressed event arguments.
+@name KeyFinder
+event keyPressed(_:entity,Key:string, Down, Bind:string)
+{
+  if(Down)
+  {
+    print(format("Pressed key '%s' with bind '%s'",Key ,Bind))
+  }
+}

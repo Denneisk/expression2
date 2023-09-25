@@ -1,0 +1,48 @@
+#Losslessly saves props into a table and spits them out as holos. Uses chat commands, p2h followed by copy or paste. Set E to a prop that is welded to every other prop you are targetting. Its only real use is for p2h print and manually convert the table into E2 code.
+# [U:1:96621146], Public Domain
+@name Prop2Holo
+@inputs E:entity #[A prop that is welded to every other prop that you want as a holo]#
+@outputs A:table #[The stored holo data]#
+@strict
+if(first()|duped())
+{
+    A = table()
+    
+    if(!holoModelAny())
+    {
+        error("wire_holograms_modelany is 0! This can't work without it!")
+    }
+    event chat(_:entity,S:string,_:number)
+    {
+        Explode = S:explode(" ")
+        if(Explode[1,string] == "p2h")
+        {
+            switch(Explode[2,string])
+            {
+                case "copy",
+                    Ta = E:getConnectedEntities()
+                    foreach(I:number,Ent:entity = Ta)
+                    {
+                        A[I,table] = table(Ent:pos(),Ent:angles(),Ent:getColor4(),Ent:model(),Ent:getMaterial())
+                    }
+                    print("p2h copied "+Ta:count()+" props.")
+                break
+                case "paste",
+                    foreach(I:number,T:table = A)
+                    {
+                        holoCreate(I,T[1,vector],vec(1),T[2,angle],T[3,vector4],T[4,string])
+                        holoMaterial(I,T[5,string])
+                    }
+                    
+                    print("p2h created "+A:count()+" holos.")
+                break
+                case "clear",
+                    holoDeleteAll()
+                break
+                case "print",
+                    printTable(A)
+                break
+            }
+        }
+    }
+}

@@ -1,0 +1,53 @@
+#Click on an object to save position and angle. Click on another object to set that object's position and angle to the saved one. Hold shift to keep using the same position/angle (otherwise it clears).
+#Use like a STool.
+@name MoveTool
+@strict
+
+if(first())
+{
+    
+    G = gTable("MoveTool")
+    E = entity():isWeldedTo()
+    
+    if(E)
+    {
+        if(G["P",vector] != vec())
+        {
+            
+            E:setPos(G["P",vector])
+            E:setAng(G["A",angle])
+            if(!owner():keySprint())
+            {
+                G["P",vector] = vec()
+                G["A",angle] = ang()
+            }
+            #print("Position applied!")
+            hint("Position applied",3)
+        }
+        else
+        {
+            P = E:pos()
+            A = E:angles()
+            G["P",vector] = P
+            G["A",angle] = A
+            #print("Position set!")
+            hint("Position set",3)
+        }
+    }
+    else
+    {
+        G["P",vector] = vec()
+        G["A",angle] = ang()
+        hint("Position cleared",3)
+    }
+    
+    if(G["First",number] == 0)
+    {
+        G["First",number] = 1
+        print("Paste on an object to save its position.\nPaste on another object to set its position.")
+        print("Hold shift to preserve paste position.")
+        print("Paste on the ground to remove saved position.")
+    }
+    
+    selfDestruct()
+}
