@@ -1,0 +1,81 @@
+@name not soulless number to word array
+@strict
+
+let Ones = table("one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten",
+            "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen",
+            "nineteen")
+let Tens = table("ten", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety")
+let Exp = table("", " thousand", " million", " billion", " trillion", " quadrillion")
+
+function number2word(N:number)
+{
+    let Ret = array()
+    let Lim = int(log10(int(N) / 10))
+    let Absinthe = abs(int(N))
+    if(Absinthe < 20)
+    {
+        Ret[1] = Ones[Absinthe, string]
+    }
+    else
+    {
+        let V = Absinthe
+        for(I = 1, Lim) {
+            let O = V % 10
+            V = int(V / 10)
+            let T = V % 10
+            V = int(V / 10)
+            let H = V % 10
+            V = int(V / 10)
+            let Set = 0
+            
+            if(T == 1)
+            {
+                Set = 1
+                Ret:unshiftString(Ones[10 + O, string])
+            }
+            elseif(O > 0)
+            {
+                Set = Set + 1
+                Ret:unshiftString(Ones[O, string])
+            }
+            if(T > 1)
+            {
+                Set = Set + 1
+                Ret:unshiftString(Tens[T, string])
+            }
+            if(H > 0)
+            {
+                Set = Set + 1
+                Ret:unshiftString(Ones[H, string] + " hundred")
+            }
+            
+            if(Set)
+            {
+                Ret[Set] = Ret[Set, string] + Exp[I, string]
+            }
+        }
+    }
+    let Frac = abs(frac(N))
+    if(Frac)
+    {
+        Ret:pushString("point")
+        while(Frac > 0.01)
+        {
+            Frac = (Frac * 10) % 10
+            Ret:pushString(Ones[int(Frac), string])
+        }
+    }
+    if(N < 0)
+    {
+        Ret:unshiftString("negative")
+    }
+    return Ret
+}
+
+print(number2word(123456789):concat(" "))
+print(number2word(1001001001):concat(" "))
+print(number2word(101):concat(" "))
+print(number2word(11):concat(" "))
+print(number2word(-1.123456789):concat(" "))
+print(number2word(12345.6789):concat(" "))
+print(number2word(1111111):concat(" "))
