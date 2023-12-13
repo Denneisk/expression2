@@ -4,7 +4,7 @@
 let Ones = table("one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten",
             "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen",
             "nineteen")
-let Tens = table("ten", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninty")
+let Tens = table("ten", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety")
 let Exp = table("thousand", "million", "billion", "trillion", "quadrillion")
 
 function number2word(N:number)
