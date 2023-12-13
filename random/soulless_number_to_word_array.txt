@@ -1,0 +1,98 @@
+@name soulless number to word array
+@strict
+
+let Ones = table("one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten",
+            "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen",
+            "nineteen")
+let Tens = table("ten", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninty")
+let Exp = table("thousand", "million", "billion", "trillion", "quadrillion")
+
+function number2word(N:number)
+{
+    let Ret = array()
+    let Lim = int(log10(N)) + 1
+    let Set = 0
+    let One = 0
+    for(I = 1, Lim) {
+        let D = N % 10
+        let Pos = I % 3
+        if(Pos == 1)
+        {
+            if(D > 0)
+            {
+                Set = 1
+                One = 1
+                Ret:unshiftNumber(D)
+            }
+        }
+        elseif(Pos == 2)
+        {
+            if(D > 0)
+            {
+                Set = 1
+                if(D == 1 & One)
+                {
+                    One = 0
+                    Ret[1] = Ones[Ret[1, number] + 10, string]
+                    if(I > 3 & Set)
+                    {
+                        Set = 0
+                        Ret[1] = Ret[1, string] + " " + Exp[int(I / 3), string]
+                    }
+                }
+                else
+                {
+                    if(One)
+                    {
+                        One = 0
+                        Ret[1] = Ones[Ret[1, number], string]
+                        if(I > 3 & Set)
+                        {
+                            Set = 0
+                            Ret[1] = Ret[1, string] + " " + Exp[int(I / 3), string]
+                        }
+                    }
+                    Ret:unshiftString(Tens[D, string])
+                }
+            }
+        }
+        else
+        {
+            if(One)
+            {
+                One = 0
+                Ret[1] = Ones[Ret[1, number], string]
+                if(I > 3 & Set)
+                {
+                    Set = 0
+                    Ret[1] = Ret[1, string] + " " + Exp[int((I - 1) / 3), string]
+                }
+            }
+            if(D > 0)
+            {
+                Ret:unshiftString(Ones[D, string] + " hundred")
+            }
+        }
+        N = int(N / 10)
+    }
+    if(One)
+    {
+        Ret[1] = Ones[Ret[1, number], string]
+    }
+    if(Set)
+    {
+        Ret[1] = Ret[1, string] + " " + Exp[int(Lim / 3), string]
+    }
+    if(N < 0)
+    {
+        Ret:unshiftString("negative")
+    }
+    return Ret
+}
+
+print(number2word(123456789):concat(" "))
+print(number2word(1001001001):concat(" "))
+print(number2word(101):concat(" "))
+print(number2word(11):concat(" "))
+print(number2word(1):concat(" "))
+print(number2word(1111111):concat(" "))
