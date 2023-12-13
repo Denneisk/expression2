@@ -4,6 +4,7 @@
 let Ones = table("one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten",
             "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen",
             "nineteen")
+Ones[0] = "zero"
 let Tens = table("ten", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety")
 let Exp = table("", " thousand", " million", " billion", " trillion", " quadrillion")
 
@@ -59,10 +60,11 @@ function number2word(N:number)
     if(Frac)
     {
         Ret:pushString("point")
-        while(Frac > 0.01)
+        Frac = (Frac * 10) % 10
+        while(Frac > 0.1)
         {
-            Frac = (Frac * 10) % 10
             Ret:pushString(Ones[int(Frac), string])
+            Frac = (Frac * 10) % 10
         }
     }
     if(N < 0)
@@ -77,5 +79,5 @@ print(number2word(1001001001):concat(" "))
 print(number2word(101):concat(" "))
 print(number2word(11):concat(" "))
 print(number2word(-1.123456789):concat(" "))
-print(number2word(12345.6789):concat(" "))
+print(number2word(12345.06789):concat(" "))
 print(number2word(1111111):concat(" "))
