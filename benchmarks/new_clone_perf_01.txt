@@ -1,0 +1,34 @@
+# This originally compared the old clone to the new clone. Now it compares clone to copy
+@strict
+
+let Multiple = table(1 = 100, 100 = 1000, 1000 = 100000, "mixed" = 1, "datatypes" = "true", "sigma" = vec2(16, 48))
+
+let T = table(1 = 1, 2 = 2, 3 = 3, 4 = 4, 5 = "this is a table",
+            6 = table(1, 2, 3, 4), 7 = array(1, 2, 3, 4, 5, 6),
+            8 = vec(100, 200, 300), 9 = wirelink(), 10 = entity(),
+            11 = Multiple,
+            "a" = 100, "b" = 200, "c" = 300, "d" = 400, "e" = "tables are vey useful data structures",
+            "foxtrot" = table("alpha" = "ALPHA", "bravo" = "BRAVO", "charlie" = "CHARLIE", "delta" = "DELTA"),
+            "golf" = array("ALPHA", "BRAVO", "CHARLIE", "DELTA", "ECHO", "FOXTROT"),
+            "hotel" = wirelink(), "india" = entity(),
+            "juliett" = Multiple)
+
+let D1_1 = systime()
+let T_1 = T:clone():typeids()
+let D1_2 = systime()
+
+let D2_1 = systime()
+let T_2 = T:copy():typeids()
+let D2_2 = systime()
+
+print("clone ", D1_2 - D1_1)
+print("clone2 ", D2_2 - D2_1)
+#printTable(T)
+#print(T_1)
+print("------------------")
+#print(T_2)
+#printTable(T2)
+
+#T_1:delta(T_2)
+
+
