@@ -1,0 +1,71 @@
+@name Dancing Partygoer
+@strict
+
+#ifndef holoCanCreate()
+error("This E2 requires the hologram extension enabled!")
+#else
+if(!holoCanCreate()) { error("This E2 requires you to be able to create holos!") }
+if(!holoModelAny()) { error("This chip requires wire_hologram_modelany enabled!") }
+
+const MODEL = "models/player/gman_high.mdl"
+const DANCE = "taunt_dance"
+const DANCE_CUTOFF = 0.02
+const DANCE_MOD = 1 - (DANCE_CUTOFF * 3)
+
+const RED = vec(255, 0, 0)
+
+let H = holoCreate(1)
+holoModel(1, MODEL)
+holoPlayerColor(1, RED)
+
+holoAnim(1, DANCE, DANCE_CUTOFF)
+const DANCELEN = holoAnimLength(1) * DANCE_MOD
+
+timer(DANCELEN, 0, function() {
+    holoAnim(1, DANCE, DANCE_CUTOFF)
+})
+
+# Hat
+
+const HEAD = H:getModelBoneIndex("ValveBiped.Bip01_Head1")
+
+const ORIGIN = H:pos()
+const NOANG = ang()
+const WHITE = vec4(255)
+const FLUFF = "phoenix_storms/egg"
+const CAP = "models/props_c17/furniturefabric002a"
+
+# Cap
+holoCreate(2, ORIGIN, vec(0.6, 0.6, 0.5), NOANG, WHITE, "hq_cone")
+holoParentBone(2, 1, HEAD)
+holoLocalPos(2, vec(10, 2.5, -0.75))
+holoLocalAng(2, ang(100, 30, 0))
+holoMaterial(2, CAP)
+
+# Lower fluff
+holoCreate(3, ORIGIN, vec(0.65, 0.65, 0.6), NOANG, WHITE, "hq_torus_thick")
+holoParent(3, 2)
+holoLocalPos(3, vec(0, 0, -3))
+holoLocalAng(3, NOANG)
+holoMaterial(3, FLUFF)
+
+# Top fluff
+holoCreate(4, ORIGIN, vec(0.15), NOANG, WHITE, "hq_sphere")
+holoParent(4, 2)
+holoLocalPos(4, vec(0, 0, 2.75))
+holoMaterial(4, FLUFF)
+
+# Face
+
+#ifdef setFlexWeight(e:sn)
+try {
+    H:setFlexWeight("right_upper_raiser", 2)
+    H:setFlexWeight("left_upper_raiser", 2)
+    H:setFlexWeight("right_corner_puller", 1)
+    H:setFlexWeight("left_corner_puller", 1)
+    H:setFlexWeight("mouth_sideways", 0.5)
+    H:setFlexWeight("jaw_sideways", 0.5)
+}catch(_:string){}
+#endif
+
+#endif

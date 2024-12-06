@@ -1,0 +1,25 @@
+@name E2 Santa Hat :)
+@strict
+
+const HEAD = owner():getModelBoneIndex("ValveBiped.Bip01_Head1")
+
+const ORIGIN = owner():pos()
+const NOANG = ang()
+const RED = vec4(255, 0, 0, 255)
+const WHITE = vec4(255)
+# Cap
+holoCreate(1, ORIGIN, vec(0.6, 0.6, 0.5), NOANG, RED, "hq_cone")
+holoParentBone(1, owner(), HEAD)
+holoLocalPos(1, vec(9, 3, -1))
+holoLocalAng(1, ang(100, 30, 0))
+
+# Lower fluff
+holoCreate(2, ORIGIN, vec(0.65, 0.65, 0.6), NOANG, WHITE, "hq_torus_thick")
+holoParent(2, 1)
+holoLocalPos(2, vec(0, 0, -3))
+holoLocalAng(2, NOANG)
+
+# Top fluff
+holoCreate(3, ORIGIN, vec(0.15), NOANG, WHITE, "hq_sphere")
+holoParent(3, 1)
+holoLocalPos(3, vec(0, 0, 2.75))

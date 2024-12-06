@@ -1,0 +1,62 @@
+@name Instant Christmas Tree
+@strict
+
+#ifndef propCanCreate()
+error("This chip requires propcore to be enabled!")
+#else
+if(!propCanCreate()) { error("You need to be able to spawn props to use this!") }
+propSpawnUndo(0)
+
+const COLORS = table(table(128, 0, 0), table(0, 128, 0), table(128, 128, 102))
+const NUMCOL = COLORS:ncount()
+
+const Lights = table()
+
+# Tree
+function tree() {
+    const TRUNK = "models/xqm/cylinderx1big.mdl"
+    const WOOD = "models/props_foliage/oak_tree01"
+    const CONE = "models/hunter/misc/cone2x2.mdl"
+    const LEAF = "phoenix_storms/ps_grass"
+    
+    const POS = entity():pos() + vec(0, 0, 17)
+    
+    let Trunk = propSpawn(TRUNK, POS, ang(90, 0, 0), 1)
+    Trunk:setMaterial(WOOD)
+    let Cone = propSpawn(CONE, Trunk:pos() + vec(0, 0, 5), 1)
+    Cone:setMaterial(LEAF)
+    
+    let Cp = Cone:pos()
+    for(I = 1, 40) {
+        let Z = I * 2
+        let X = (100 - Z) * 0.5
+        let N = I * 30
+        let P = Cp + vec(sin(N) * X, cos(N) * X, Z)
+        let A = ang(90, 90, N)
+        let C = COLORS[I % NUMCOL + 1, table]
+        let W = sentSpawn("gmod_wire_light", P, A, table(
+            "Model" = "models/fasteroid/led_mini.mdl", "glow" = 1, "size" = 1,  "brightness" = 1, "radiant" = 1,
+            "R" = C[1, number], "G" = C[2, number], "B" = C[3, number])):wirelink()
+        W["SpriteSize"] = 16
+        W["Brightness"] = 1
+        W["On"] = 1
+        Lights:pushWirelink(W)
+    }
+    
+    let Tick = 0
+    timer("lights", 1, 0, function() {
+        Tick = Tick + 1
+        foreach(I:number, W:wirelink = Lights) {
+            let N = Tick + I
+            let C = COLORS[(N % NUMCOL) + 1, table]
+            W["Red"] = C[1, number]
+            W["Green"] = C[2, number]
+            W["Blue"] = C[3, number]
+        }
+    })
+}
+
+tree()
+
+
+#endif
